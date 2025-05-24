@@ -5,6 +5,8 @@ A simple Bash tool to change your MAC address to a random, valid, locally admini
 ## Usage
 
 ```bash
+cd random_mac_spoof
+chmod +x random_mac_spoof.sh
 sudo ./random_mac_spoof.sh
 ```
 
