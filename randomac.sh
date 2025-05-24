@@ -1,15 +1,19 @@
 #!/bin/bash
-# random_mac_spoof.sh - Random MAC address changer for privacy 
+# randomac.sh - Random MAC address changer for privacy 
 
 IFACE="${1:-eth0}"  # Allow interface as argument; default to eth0
 
 # Generate a locally administered, unicast MAC address
 generate_random_mac() {
-  hexchars="0123456789ABCDEF"
+  hexchars="0123456789ABCDEFGH"
   echo "02$(for i in {1..5}; do echo -n ${hexchars:$((RANDOM % 16)):1}${hexchars:$((RANDOM % 16)):1}; done | sed 's/../:&/g')"
 }
 
+while true; do
 RANDOM_MAC=$(generate_random_mac)
+ echo
+  echo "=== $(date) ==="
+  echo "[*] Changing MAC on $IFACE to $RANDOM_MAC"
 
 echo "[*] Target interface: $IFACE"
 echo "[*] Generated random MAC: $RANDOM_MAC"
