@@ -1,4 +1,4 @@
-# random_mac_spoof
+# randomac
 
 A simple Bash tool to change your MAC address to a random, valid, locally administered address. Great for testing network filtering or privacy tools.
 
@@ -6,9 +6,9 @@ A simple Bash tool to change your MAC address to a random, valid, locally admini
 
 ```bash
 git clone https://github.com/shackablacka/randomachanger-eth0.git
-cd random_mac_spoof
-chmod +x random_mac_spoof.sh
-sudo ./random_mac_spoof.sh
+cd randomac
+chmod +x randomac.sh
+sudo ./randomac.sh
 ```
 
 ## Note
