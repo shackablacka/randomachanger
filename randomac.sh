@@ -1,5 +1,5 @@
 #!/bin/bash
-# Random MAC address changer for lab testing
+# Random MAC address changer 
 
 IFACE="eth0"  
 
