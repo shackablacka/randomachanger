@@ -9,6 +9,7 @@ generate_random_mac() {
   echo "02$(for i in {1..5}; do echo -n ${hexchars:$((RANDOM % 16)):1}${hexchars:$((RANDOM % 16)):1}; done | sed 's/../:&/g')"
 }
 
+# Ensure the log file exists and is writable
 sudo touch "$LOGFILE"
 sudo chown "$USER" "$LOGFILE"
 
