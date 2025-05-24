@@ -1,10 +1,10 @@
 #!/bin/bash
 # Random MAC address changer for lab testing
 
-IFACE="eth0"  # Change to your actual interface (e.g., wlan0)
+IFACE="eth0"  
 
 generate_random_mac() {
-  hexchars="0123456789ABCDEF"
+  hexchars="0123456789ABCDEFGH"
   echo "02$(for i in {1..5}; do echo -n ${hexchars:$((RANDOM % 16)):1}${hexchars:$((RANDOM % 16)):1}; done | sed 's/../:&/g')"
 }
 
