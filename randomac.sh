@@ -1,40 +1,48 @@
 #!/bin/bash
-# randomac.sh - Random MAC address changer for privacy 
+# randomac.sh - Periodically changes MAC address for privacy
 
-IFACE="${1:-eth0}"  # Allow interface as argument; default to eth0
+IFACE="${1:-eth0}"  # Default interface is eth0, or use argument
+LOGFILE="/var/log/mac_spoof.log"
 
-# Generate a locally administered, unicast MAC address
 generate_random_mac() {
   hexchars="0123456789ABCDEFGH"
   echo "02$(for i in {1..5}; do echo -n ${hexchars:$((RANDOM % 16)):1}${hexchars:$((RANDOM % 16)):1}; done | sed 's/../:&/g')"
 }
 
+sudo touch "$LOGFILE"
+sudo chown "$USER" "$LOGFILE"
+
 while true; do
-RANDOM_MAC=$(generate_random_mac)
- echo
-  echo "=== $(date) ==="
-  echo "[*] Changing MAC on $IFACE to $RANDOM_MAC"
+  RANDOM_MAC=$(generate_random_mac)
+  TIMESTAMP="$(date '+%Y-%m-%d %H:%M:%S')"
 
-echo "[*] Target interface: $IFACE"
-echo "[*] Generated random MAC: $RANDOM_MAC"
+  {
+    echo
+    echo "=== $TIMESTAMP ==="
+    echo "[*] Target interface: $IFACE"
+    echo "[*] Generated MAC: $RANDOM_MAC"
 
-# Validate interface exists
-if ! ip link show "$IFACE" &> /dev/null; then
-  echo "[!] Interface $IFACE not found. Exiting."
-  exit 1
-fi
+    if ! ip link show "$IFACE" &>/dev/null; then
+      echo "[!] Interface $IFACE not found. Exiting."
+      exit 1
+    fi
 
-echo "[*] Bringing down interface $IFACE..."
-sudo ip link set "$IFACE" down || exit 1
+    echo "[*] Bringing down $IFACE..."
+    sudo ip link set "$IFACE" down || exit 1
 
-echo "[*] Changing MAC address..."
-sudo ip link set "$IFACE" address "$RANDOM_MAC" || exit 1
+    echo "[*] Setting new MAC..."
+    sudo ip link set "$IFACE" address "$RANDOM_MAC" || exit 1
 
-echo "[*] Bringing up interface $IFACE..."
-sudo ip link set "$IFACE" up || exit 1
+    echo "[*] Bringing up $IFACE..."
+    sudo ip link set "$IFACE" up || exit 1
 
-echo "[+] MAC address successfully changed to:"
-ip link show "$IFACE" | grep ether
- echo "[*] Sleeping for 10 minutes..."
+    echo "[+] MAC address changed to:"
+    ip link show "$IFACE" | grep ether
+
+    echo "[*] Sleeping for 10 minutes..."
+  } | tee -a "$LOGFILE"
+
   sleep 600
 done
+
+
