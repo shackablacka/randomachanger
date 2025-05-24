@@ -8,9 +8,11 @@ A simple Bash tool to change your MAC address to a random, valid, locally admini
 git clone https://github.com/shackablacka/randomachanger.git
 cd randomachanger
 chmod +x randomac.sh
-sudo ./randomac.sh
+sudo ./randomac.sh        # uses eth0 by default
+sudo ./randomac.sh wlan0  # change MAC on wlan0
+
 ```
 
 ## Note
 
-Change the interface in the script (`IFACE="eth0"`) to your actual one, like `wlan0`.
+Use for educational purpose only
